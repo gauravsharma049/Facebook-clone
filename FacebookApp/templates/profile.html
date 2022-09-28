@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block profile %}
+<a class="bg-success text-light py-2 rounded mx-2 text-decoration-none px-3 my-2 d-inline-block"
+    href="{% url 'viewProfile' %}">View profile details</a>
+
+<div>
+    <img src="/media/{{profile.profile_pic}}" alt="">
+    <span>{{profile.user.first_name}} {{profile.user.last_name}}</span>
+    <span>{{profile.bio}}</span>
+</div>
+<div>{{follower.count}} followers</div>
+<div>{{following.count}} following</div>
+<div>
+    <form action="/follow/" method="post">
+        {% csrf_token %}
+        <input type="text" hidden value="{{profile.user.username}}" name="username">
+        <button type="submit">{{follow}}</button>
+    </form>
+</div>
+<div>
+    posts: <br>
+
+
+    {% for post in post %}
+        <div class="container my-3 newsfeed post-i" id="post{{post.post_id}}">
+
+            <div class="container-fluid border mb-3 round-border bg-white shadow-around py-2 px-0" style="width: 80%;">
+                <div class="container-fluid">
+                    <div class="pst-head d-flex justify-content-between">
+                        <div class="d-flex">
+                            <a href="{% url 'profileid' post.post_user.username %}">
+                                <div class="p-0 pst-profile-img text-center">
+
+                                    <img style="height: 50px; width: auto;"
+                                        src="/media/{{post.profile_pic.profile_pic}}" class="rounded-circle" alt="...">
+                                </div>
+                            </a>
+                            <div>
+                                <a class="text-decoration-none text-dark" href="{% url 'profileid' post.post_user.username %}">
+                                    <div class="pst-user-name pt-1 px-2" style="font-weight: 600;">
+                                        {{post.post_user.first_name}} {{post.post_user.last_name}}
+                                    </div>
+                                </a>
+                                <div class="pub-date px-2"
+                                    style="line-height: 10px; font-size: 13px; font-weight: 400;">
+                                    {{post.post_time|naturaltime}} . <span
+                                        style="font-size: 20px; font-weight: bold;"><i
+                                            class="fa-solid fa-gear"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="bg-transparent border-0 btn font-weight-bold" style="font-size: 20px;">
+                                ...
+                            </button>
+                        </div>
+                    </div>
+                    <div class="post-content pt-1 pb-2" style="font-size: 1rem;">
+                        <div>{{post.post_id}}</div>
+                        {{post.post_content}}
+                    </div>
+                </div>
+                <div class="post-img">
+                    <img class="img-fluid" src="/media/{{post.post_img}}" alt="pst-img">
+                </div>
+                <div class="container-fluid comment-like-share-count d-flex justify-content-between">
+                    <div class="like-count">
+                        {{post.no_of_likes}} Likes
+                    </div>
+                    <div class="comment-share-count">
+                        <span class="comment-count">
+                            {{post.no_of_comments}} comments
+                        </span>
+                        <span class="share-count">
+                            {{post.no_of_shares}} shares
+                        </span>
+                    </div>
+                </div>
+                <hr class="px-2 my-2 mx-auto hrw-90">
+                <div class="container-fluid d-flex justify-content-around ml-1 like-comment-share">
+                    <form action="/like/" method="post">
+                        {% csrf_token %}
+                        <input type="number" name = "post_id" id="post_id" value="{{post.post_id}}" hidden>
+                        <button class="like-comment-share-btn" type="submit">
+                            <div class="like round-border px-4 py-1">
+                                <i class="fa-regular fa-thumbs-up"></i>
+                                <span>&nbsp Like</span>
+                            </div>
+                        </button>
+                    </form>
+                    <div class="comment round-border px-4 py-1">
+                        <i class="fa-regular fa-message"></i>
+                        <span>&nbsp Comment</span>
+                    </div>
+                    <div class="share round-border px-4 py-1">
+                        <i class="fa-solid fa-share"></i>
+                        <span>&nbsp Share</span>
+                    </div>
+                    <!-- <div class="bg-info">you</div> -->
+                </div>
+            </div>
+
+
+        </div>
+        {% endfor %}
+</div>
+
+{% endblock %}

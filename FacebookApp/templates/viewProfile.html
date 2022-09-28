@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block viewProfile %}
+
+<a class="bg-success text-light py-2 rounded mx-2 text-decoration-none px-3 my-2 d-inline-block" href="{% url 'profile' %}">back to Timeline</a>
+    
+    {% if user.is_authenticated %}
+        <div class="card text-white bg-primary mb-3 d-flex flex-row justify-content-around">
+            <div>
+                <div class="card-header">
+                    {{user.username}}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">First name :- </h5>
+                    <p style="font-size: 20px;" class="card-title">{{user.first_name}}</p>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Last name :- </h5>
+                    <p style="font-size: 20px;" class="card-title">{{user.last_name}}</p>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Email id :- </h5>
+                    <p style="font-size: 20px;" class="card-title">{{user.email}}</p>
+                </div>
+                <button type="button" class="btn btn-success my-2">Change details</button>
+            </div>
+            <div class="border p-4 py-5 shadow my-5 rounded">
+                <form method="post">
+                    <div class="form-group">
+                      <label for="firstName">First Name :</label>
+                      <input type="text" class="form-control" id="firstName" name = "firstName" placeholder="First name" value="{{firstname}}">
+                    </div>
+                    <div class="form-group">
+                      <label for="lastName">Last Name :</label>
+                      <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last name" value="{{lastname}}">
+                    </div>
+                    <div class="form-group">
+                      <label for="changeEmail">Email address</label>
+                      <input type="email" class="form-control" id="changeEmail" name="changeEmail" placeholder="Enter email" value = "{{email}}">
+                    </div>
+                    
+                    
+                    <button type="submit" class="btn btn-success">Save</button>
+                    {% csrf_token %}
+                  </form>
+            </div>
+      </div>
+        
+      
+
+
+
+
+
+
+    {% endif %}
+
+{% endblock  %}

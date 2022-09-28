@@ -1,0 +1,300 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'FacebookApp/fontawesome/css/fontawesome.css' %}">
+    <link rel="stylesheet" href="{% static 'FacebookApp/fontawesome/css/brands.css' %}">
+    <link rel="stylesheet" href="{% static 'FacebookApp/fontawesome/css/solid.css' %}">
+    <link rel="stylesheet" href="{% static 'FacebookApp/fontawesome/css/regular.css' %}">
+
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href= "{% static 'FacebookApp/css/style.css' %}">
+    {% block Stylesheet %}{% endblock %}
+    <style>
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgb(255 255 255 / 81%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body onload="loading()" class="bg-light">
+
+    {% if user.is_authenticated %}
+    <div style="height: 56px;">
+
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="{% url 'home' %}">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-primary border my-2 my-sm-0" type="submit">Search</button>
+                </form>
+    
+    
+    
+                <ul class="navbar-nav mx-4 ml-3">
+                    <li class="nav-item dropdown">
+                        <span style="cursor: pointer;" class="text-light dropdown-toggle" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Welcome {{user.first_name}} {{user.last_name}}
+                        </span>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'profileid' request.user.username %}">Profile</a>
+    
+                            <div class="dropdown-divider"></div>
+                            <form action="/logout/" method="post">
+                                <button type="submit" class="dropdown-item">Logout</button>
+                                {% csrf_token %}
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+        </nav>
+    </div>
+
+    {% else %}
+    <div></div>
+    <div class="container d-flex p-0 mt-5">
+        <div style="height: 369px;" class="container-fluid  py-5">
+            <div class="py-5">
+                <div>
+                    <h1 class="text-primary font-weight-bold" style="font-size: 55px;">facebook</h1>
+                </div>
+                <div>
+                    <h2 style="font-size: 28px; font-weight: normal;">
+                        Facebook helps you connect and share with the people in your life.
+                    </h2>
+                </div>
+            </div>
+
+        </div>
+        <!-- login -->
+        <div style="height: max-content;" class="container-fluid bg-white w-75 py-3 border round-border shadow">
+            <form action="/login/" method="post">
+                {% csrf_token %}
+                <input style="display: none;" type="checkbox" name="dd" id="dd" {{checked}}>
+                <p style="color: red;">{{invalid_login}}</p>
+                <div class="form-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" class="form-control" id="loginUsername" name="loginUsername" placeholder="Enter username">
+
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" name="loginPassword" placeholder="Password">
+                </div>
+
+                <div class="">
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <div style="cursor: pointer;" class="text-primary my-3 text-center" data-toggle="modal"
+                        data-dismiss="modal" data-target="#forgottenPasswordModal">Forgotten Password?
+                    </div>
+                </div>
+                <div>
+                    <hr>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#signUpModal">Create New Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signUpModalLabel">Sign Up here</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/signup" method="post">
+
+                        <div class="form-group">
+                            <small id="userhelp" class="form-text text-muted">username should contain only alphabets and
+                                numbers</small>
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                placeholder="Enter username" required>
+
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="fName">First Name:</label>
+                                <input type="text" class="form-control" id="fName" name="fName"
+                                    placeholder="Enter your first name" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="l_Name">Last Name:</label>
+                                <input type="text" class="form-control" id="l_Name" name="l_Name"
+                                    placeholder="Enter your last name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Enter password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cnfpassword">Confirm password</label>
+                            <input type="password" class="form-control" id="cnfpassword" name="cnfpassword"
+                                placeholder="Password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                        {% csrf_token %}
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Forgotten password Modal -->
+    <div class="modal fade" id="forgottenPasswordModal" tabindex="-1" role="dialog"
+        aria-labelledby="forgottenPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="forgottenPasswordModalLabel">Forgotten Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/forgotpassword/" method="post">
+
+                        <div class="form-group">
+                            <label for="forgotusername">Username</label>
+                            <input type="text" class="form-control" id="forgotusername" name="forgotusername"
+                                placeholder="Enter username" required>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="forgotpassword">New Password</label>
+                            <input type="password" class="form-control" id="forgotpassword" name="forgotpassword"
+                                placeholder="Enter new password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="forgotcnfpassword">Confirm password</label>
+                            <input type="password" class="form-control" id="forgotcnfpassword" name="forgotcnfpassword"
+                                placeholder="Re-enter Password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Change Password</button>
+                        {% csrf_token %}
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    {% endif %}
+
+    {% for message in messages %}
+    <div class="container-fluid p-0">
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="True">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+
+
+
+
+    
+
+    
+    {% if user.is_authenticated %}
+    
+    {% block newsfeed %}{% endblock  %}
+
+    {% block profile %}{% endblock  %}
+
+    {% block viewProfile %}{% endblock  %}
+    
+    {% block friendlist %}{% endblock  %}
+
+    {% endif %}
+
+    <script>
+        function loading() {
+            if (document.getElementById('dd').checked) {
+                document.getElementById('loginbtn').click()
+            }
+        }
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
